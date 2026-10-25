@@ -264,6 +264,16 @@ public class DataMahasiswaApp extends JFrame
                 return;
             }
             if (!validasi()) return;
+            String nimBaru = txtNim.getText().trim();
+            // cek NIM baru tidak bentrok dengan baris lain
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if (i != row && model.getValueAt(i, 0).equals(nimBaru)) {
+                    JOptionPane.showMessageDialog(this, "NIM sudah dipakai mahasiswa lain!",
+                            "Gagal", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            model.setValueAt(nimBaru, row, 0);
             model.setValueAt(txtNama.getText().trim(), row, 1);
             model.setValueAt(cmbJurusan.getSelectedItem(), row, 2);
             model.setValueAt(ambilGender(), row, 3);
@@ -305,7 +315,6 @@ public class DataMahasiswaApp extends JFrame
         int row = tabel.getSelectedRow();
         if (row < 0) return;
         txtNim.setText(model.getValueAt(row, 0).toString());
-        txtNim.setEditable(false); // NIM tidak boleh diubah saat edit
         txtNama.setText(model.getValueAt(row, 1).toString());
         cmbJurusan.setSelectedItem(model.getValueAt(row, 2));
         if ("Laki-laki".equals(model.getValueAt(row, 3))) rbLaki.setSelected(true);
